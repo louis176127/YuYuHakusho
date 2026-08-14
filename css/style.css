@@ -28,10 +28,12 @@
 }
 
 * { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
 
 body {
   margin: 0;
   min-height: 100vh;
+  overflow-x: hidden;
   background-color: var(--paper);
   background-image:
     radial-gradient(circle at 15% 20%, rgba(140, 122, 91, 0.08) 0%, transparent 45%),
@@ -49,6 +51,7 @@ a { color: inherit; }
   max-width: 1080px;
   margin: 0 auto;
   padding: 32px 24px 80px;
+  width: 100%;
 }
 
 /* ---------- 頁首：印信 / 標題 ---------- */
@@ -101,14 +104,14 @@ a { color: inherit; }
   margin: 0;
   font-family: var(--font-display);
   font-weight: 900;
-  font-size: 30px;
-  letter-spacing: 4px;
+  font-size: clamp(22px, 6vw, 30px);
+  letter-spacing: clamp(1.5px, 1vw, 4px);
   color: var(--charcoal);
 }
 .title-text p {
   margin: 4px 0 0;
-  font-size: 13px;
-  letter-spacing: 3px;
+  font-size: clamp(11px, 2.6vw, 13px);
+  letter-spacing: 2px;
   color: var(--ink-soft);
 }
 
@@ -417,8 +420,84 @@ footer.site-footer {
   margin-top: 60px;
 }
 
-@media (max-width: 680px) {
-  .site-header { flex-direction: column; align-items: flex-start; }
-  .form-grid { grid-template-columns: 1fr; }
-  .toolbar { flex-direction: column; align-items: stretch; }
+/* ============================================
+   響應式：平板（≤ 900px）
+   ============================================ */
+@media (max-width: 900px) {
+  .page-wrap { padding: 24px 16px 60px; }
+  .scroll-card { padding: 24px 18px; }
 }
+
+/* ============================================
+   響應式：手機（≤ 680px）
+   ============================================ */
+@media (max-width: 680px) {
+  .page-wrap { padding: 18px 12px 48px; }
+
+  /* 頁首：標題與導覽改成直式排列，導覽鍵平均分配寬度 */
+  .site-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+    padding-bottom: 18px;
+  }
+  .title-block { gap: 12px; }
+  .seal-stamp { width: 52px; height: 52px; font-size: 11px; border-width: 2px; }
+  .site-nav { width: 100%; }
+  .site-nav a { flex: 1; text-align: center; padding: 11px 8px; font-size: 13px; letter-spacing: 1px; }
+
+  .scroll-card { padding: 20px 14px; margin-top: 18px; border-radius: 6px; }
+  .scroll-card::before, .scroll-card::after { left: 10px; right: 10px; }
+
+  .section-title { font-size: 17px; letter-spacing: 2px; flex-wrap: wrap; }
+  .section-desc { font-size: 13px; margin-bottom: 20px; }
+
+  /* 表單：單欄排列，欄位間距縮小 */
+  .form-grid { grid-template-columns: 1fr; gap: 16px; }
+  .field input, .field select { font-size: 16px; padding: 12px; } /* 16px 避免 iOS 自動放大 */
+
+  .form-actions { flex-wrap: wrap; gap: 12px; }
+  .form-actions .btn { flex: 1; min-width: 140px; text-align: center; }
+  .status-msg { width: 100%; order: 3; }
+
+  /* 工具列：全部改成直式排列 */
+  .toolbar { flex-direction: column; align-items: stretch; gap: 14px; }
+  .toolbar .field, .toolbar .field.grow { min-width: 0; width: 100%; }
+  .toolbar-actions { width: 100%; justify-content: space-between; }
+  .admin-lock { flex-wrap: wrap; }
+
+  /* 清單頁按鈕列：可換行、平均寬度 */
+  #ledger-table + * , .form-actions.list-actions { flex-wrap: wrap; }
+
+  /* 表格：允許橫向滑動，加上視覺提示 */
+  .table-wrap {
+    border-radius: 6px;
+    position: relative;
+    -webkit-overflow-scrolling: touch;
+    box-shadow: inset -12px 0 12px -12px var(--shadow);
+  }
+  table.ledger { font-size: 12.5px; min-width: 760px; }
+  table.ledger thead th { padding: 10px 10px; font-size: 12px; }
+  table.ledger td { padding: 9px 10px; }
+  .row-actions { flex-direction: column; gap: 4px; }
+  .row-actions .btn { width: 100%; text-align: center; }
+
+  /* Modal：貼齊螢幕邊緣、留出安全間距 */
+  .modal-backdrop { padding: 12px; align-items: flex-end; }
+  .modal { max-width: 100%; padding: 20px 16px; border-radius: 10px 10px 0 0; }
+  .modal .form-grid { gap: 14px; }
+  .modal-actions { flex-wrap: wrap; }
+  .modal-actions .btn { flex: 1; }
+}
+
+/* ============================================
+   響應式：極小螢幕（≤ 380px）
+   ============================================ */
+@media (max-width: 380px) {
+  .seal-stamp { width: 44px; height: 44px; font-size: 10px; }
+  .site-nav a { padding: 10px 4px; font-size: 12px; letter-spacing: 0.5px; }
+  .btn { padding: 11px 18px; font-size: 13px; }
+}
+
+/* 避免任何元素造成整頁橫向溢出 */
+img, svg, table { max-width: 100%; }
