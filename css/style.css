@@ -444,6 +444,26 @@ footer.site-footer {
   margin-top: 60px;
 }
 
+/* ---------- 統計頁：圖表區塊 ---------- */
+.chart-box {
+  background: var(--paper-light);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 20px 18px 8px;
+  margin-bottom: 30px;
+}
+
+.subsection-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 16px;
+  letter-spacing: 2px;
+  color: var(--charcoal);
+  margin: 0 0 14px;
+  padding-left: 10px;
+  border-left: 4px solid var(--seal-red);
+}
+
 /* ============================================
    響應式：平板（≤ 900px）
    ============================================ */

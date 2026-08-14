@@ -42,6 +42,7 @@ function ybsRenderNav(activePage) {
   let html = `<a href="index.html" class="${activePage === 'index' ? 'active' : ''}">盟友報名</a>`;
   if (unlocked) {
     html += `<a href="list.html" class="${activePage === 'list' ? 'active' : ''}">盟友清單</a>`;
+    html += `<a href="stats.html" class="${activePage === 'stats' ? 'active' : ''}">盟友統計</a>`;
   }
   nav.innerHTML = html;
 }
@@ -83,8 +84,8 @@ function ybsInitAuthUI(activePage, onChange) {
       ybsRenderNav(activePage);
       ybsRenderLockUI();
       if (onChange) onChange(false);
-      if (activePage === 'list') {
-        // 在清單頁鎖定後，導回報名頁（清單頁本身僅限已解鎖時瀏覽）
+      if (activePage === 'list' || activePage === 'stats') {
+        // 在受保護頁面鎖定後，導回報名頁（這些頁面僅限已解鎖時瀏覽）
         window.location.href = 'index.html';
       }
     } else {

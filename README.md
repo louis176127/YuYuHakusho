@@ -76,14 +76,14 @@ const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxxxxxxxxxxxx/exec'
 ## 四、發佈到 GitHub Pages
 
 1. 到 GitHub 建立一個新的 **Public** repository，例如叫 `youyou-baishu`。
-2. 把這個資料夾（`index.html`、`list.html`、`css/`、`js/`）全部上傳到 repo（`Code.gs` 和 `README.md` 也可以一併放上去方便未來維護，它們不會影響網站運作）。
+2. 把這個資料夾（`index.html`、`list.html`、`stats.html`、`css/`、`js/`）全部上傳到 repo（`Code.gs` 和 `README.md` 也可以一併放上去方便未來維護，它們不會影響網站運作）。
 3. 到 repo 的 **Settings → Pages**：
    - Source 選擇 `main` 分支、資料夾選 `/ (root)`
    - 存檔後幾分鐘，會產生網址：
      ```
      https://你的帳號.github.io/youyou-baishu/
      ```
-4. 把這個網址分享給盟友，「盟友報名」頁面任何人都可以直接填寫；「盟友清單」頁面需要輸入管理密碼才能編輯、刪除、切換 Flag。
+4. 把這個網址分享給盟友，「盟友報名」頁面任何人都可以直接填寫；「盟友清單」與「盟友統計」頁面需要輸入管理密碼才能瀏覽，未解鎖時導覽列也不會顯示這兩個連結。
 
 ---
 
@@ -99,10 +99,16 @@ const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxxxxxxxxxxxx/exec'
   - 依組別、是否入選、是否高戰篩選
   - 點欄位標題排序（再點一次切換升冪／降冪）
   - 匯出目前篩選結果為 Excel（`.xlsx`）
-- 點「解鎖」輸入管理密碼後，才能：
+- 此頁面需先在頁首解鎖管理密碼才能瀏覽；未解鎖時導覽列也不會顯示這個連結
+- 解鎖後才能：
   - 直接在表格切換「是否入選」「是否高戰」
   - 新增 / 編輯 / 刪除盟友資料
-- 管理密碼僅暫存在瀏覽器分頁的 sessionStorage，關閉分頁即失效，不會外流到原始碼中
+
+### 盟友統計（stats.html）
+- 同樣需先解鎖管理密碼才能瀏覽
+- 直方圖：以組別為橫軸，堆疊顯示「一般」與「高戰」盟友人數（顏色區分），滑鼠移到長條上會顯示各組總人數
+- 下方表格列出每個組別的一般人數、高戰人數與總人數，並附總計列
+- 沒有人報名的組別也會列出（人數為 0），方便掌握各組招募進度
 
 ---
 

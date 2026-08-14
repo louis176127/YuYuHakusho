@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>悠遊白書｜盟友統計</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="page-wrap">
+
+  <header class="site-header">
+    <div class="title-block">
+      <div class="seal-stamp">悠遊白書</div>
+      <div class="title-text">
+        <h1>悠遊白書</h1>
+        <p>三國志戰略版・同盟登記處</p>
+      </div>
+    </div>
+    <div class="header-controls">
+      <nav class="site-nav" id="site-nav"></nav>
+      <div class="admin-lock" id="admin-lock">
+        <span class="dot"></span>
+        <span id="admin-lock-label">管理權限：未解鎖</span>
+        <button type="button" class="btn btn-ghost btn-small" id="admin-lock-btn">解鎖</button>
+      </div>
+    </div>
+  </header>
+
+  <section class="scroll-card">
+    <h2 class="section-title"><span class="eyebrow">參</span>盟友統計</h2>
+    <p class="section-desc">依組別統計報名人數，並區分一般與高戰盟友。此頁僅限已解鎖管理權限的成員瀏覽。</p>
+
+    <div id="locked-gate" class="locked-gate">
+      <p>此頁面僅限同盟管理者查看。請先在右上角輸入管理密碼解鎖，即可瀏覽統計圖表。</p>
+      <button type="button" class="btn btn-primary" id="locked-gate-unlock">輸入管理密碼</button>
+    </div>
+
+    <div id="stats-content" style="display:none;">
+      <div class="form-actions" style="margin-top:0; margin-bottom:10px;">
+        <button type="button" class="btn btn-ghost" id="refresh-btn">重新整理</button>
+        <span class="status-msg" id="stats-status"></span>
+      </div>
+
+      <div class="chart-box">
+        <canvas id="group-chart" height="120"></canvas>
+      </div>
+
+      <h3 class="subsection-title">各組明細</h3>
+      <div class="table-wrap">
+        <table class="ledger" id="stats-table">
+          <thead>
+            <tr>
+              <th class="no-sort">組別</th>
+              <th class="no-sort">一般人數</th>
+              <th class="no-sort">高戰人數</th>
+              <th class="no-sort">總人數</th>
+            </tr>
+          </thead>
+          <tbody id="stats-body">
+            <tr class="empty-row"><td colspan="4">載入中…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">悠遊白書 ・ 同盟內部管理工具</footer>
+</div>
+
+<!-- 解鎖管理權限 Modal -->
+<div class="modal-backdrop" id="unlock-modal">
+  <div class="modal">
+    <h3>解鎖管理權限</h3>
+    <div class="form-grid">
+      <div class="field">
+        <label>管理密碼</label>
+        <input type="password" id="unlock-password" placeholder="請輸入管理密碼">
+      </div>
+    </div>
+    <div class="status-msg err" id="unlock-error"></div>
+    <div class="modal-actions">
+      <button type="button" class="btn btn-ghost" data-close="unlock-modal">取消</button>
+      <button type="button" class="btn btn-primary" id="unlock-confirm">確認</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<script src="js/config.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/stats.js"></script>
+</body>
+</html>
