@@ -17,10 +17,14 @@
         <p>三國志戰略版・同盟登記處</p>
       </div>
     </div>
-    <nav class="site-nav">
-      <a href="index.html" class="active">盟友報名</a>
-      <a href="list.html">盟友清單</a>
-    </nav>
+    <div class="header-controls">
+      <nav class="site-nav" id="site-nav"></nav>
+      <div class="admin-lock" id="admin-lock">
+        <span class="dot"></span>
+        <span id="admin-lock-label">管理權限：未解鎖</span>
+        <button type="button" class="btn btn-ghost btn-small" id="admin-lock-btn">解鎖</button>
+      </div>
+    </div>
   </header>
 
   <section class="scroll-card">
@@ -62,7 +66,27 @@
   <footer class="site-footer">悠遊白書 ・ 同盟內部管理工具</footer>
 </div>
 
+<!-- 解鎖管理權限 Modal -->
+<div class="modal-backdrop" id="unlock-modal">
+  <div class="modal">
+    <h3>解鎖管理權限</h3>
+    <div class="form-grid">
+      <div class="field">
+        <label>管理密碼</label>
+        <input type="password" id="unlock-password" placeholder="請輸入管理密碼">
+      </div>
+    </div>
+    <div class="status-msg err" id="unlock-error"></div>
+    <div class="modal-actions">
+      <button type="button" class="btn btn-ghost" data-close="unlock-modal">取消</button>
+      <button type="button" class="btn btn-primary" id="unlock-confirm">確認</button>
+    </div>
+  </div>
+</div>
+
 <script src="js/config.js"></script>
+<script src="js/auth.js"></script>
 <script src="js/app.js"></script>
+<script>ybsInitAuthUI('index');</script>
 </body>
 </html>

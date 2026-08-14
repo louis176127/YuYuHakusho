@@ -17,16 +17,26 @@
         <p>三國志戰略版・同盟登記處</p>
       </div>
     </div>
-    <nav class="site-nav">
-      <a href="index.html">盟友報名</a>
-      <a href="list.html" class="active">盟友清單</a>
-    </nav>
+    <div class="header-controls">
+      <nav class="site-nav" id="site-nav"></nav>
+      <div class="admin-lock" id="admin-lock">
+        <span class="dot"></span>
+        <span id="admin-lock-label">管理權限：未解鎖</span>
+        <button type="button" class="btn btn-ghost btn-small" id="admin-lock-btn">解鎖</button>
+      </div>
+    </div>
   </header>
 
   <section class="scroll-card">
     <h2 class="section-title"><span class="eyebrow">貳</span>盟友清單</h2>
-    <p class="section-desc">同盟名冊總覽，可篩選、排序、匯出。編輯、刪除與新增需先解鎖管理權限。</p>
+    <p class="section-desc">同盟名冊總覽，可篩選、排序、匯出。此頁僅限已解鎖管理權限的成員瀏覽。</p>
 
+    <div id="locked-gate" class="locked-gate">
+      <p>此頁面僅限同盟管理者查看。請先在右上角輸入管理密碼解鎖，即可瀏覽與管理盟友名冊。</p>
+      <button type="button" class="btn btn-primary" id="locked-gate-unlock">輸入管理密碼</button>
+    </div>
+
+    <div id="list-content" style="display:none;">
     <div class="toolbar">
       <div class="field grow">
         <label>關鍵字搜尋</label>
@@ -52,18 +62,10 @@
           <option value="false">非高戰</option>
         </select>
       </div>
-      <div class="toolbar-spacer"></div>
-      <div class="toolbar-actions">
-        <div class="admin-lock" id="admin-lock">
-          <span class="dot"></span>
-          <span id="admin-lock-label">管理權限：未解鎖</span>
-          <button type="button" class="btn btn-ghost btn-small" id="admin-lock-btn">解鎖</button>
-        </div>
-      </div>
     </div>
 
     <div class="form-actions" style="margin-top:0; margin-bottom:18px;">
-      <button type="button" class="btn btn-bamboo" id="add-btn" disabled>＋ 新增盟友</button>
+      <button type="button" class="btn btn-bamboo" id="add-btn">＋ 新增盟友</button>
       <button type="button" class="btn btn-ghost" id="refresh-btn">重新整理</button>
       <button type="button" class="btn btn-primary" id="export-btn">匯出 Excel</button>
       <span class="status-msg" id="list-status"></span>
@@ -87,6 +89,7 @@
           <tr class="empty-row"><td colspan="8">載入中…</td></tr>
         </tbody>
       </table>
+    </div>
     </div>
   </section>
 
@@ -162,6 +165,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script src="js/config.js"></script>
+<script src="js/auth.js"></script>
 <script src="js/list.js"></script>
 </body>
 </html>
