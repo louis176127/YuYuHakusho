@@ -10,8 +10,6 @@ let sortDir = -1; // -1 = 新到舊 / 大到小
 let editingId = null; // null = 新增模式
 let pendingDeleteId = null;
 
-let adminPassword = sessionStorage.getItem('ybs_admin_password') || null;
-
 // ---------- DOM 參照 ----------
 const ledgerBody = document.getElementById('ledger-body');
 const listStatus = document.getElementById('list-status');
@@ -19,10 +17,9 @@ const filterKeyword = document.getElementById('filter-keyword');
 const filterGroup = document.getElementById('filter-group');
 const filterSelected = document.getElementById('filter-selected');
 const filterVeteran = document.getElementById('filter-veteran');
-const adminLockEl = document.getElementById('admin-lock');
-const adminLockLabel = document.getElementById('admin-lock-label');
-const adminLockBtn = document.getElementById('admin-lock-btn');
 const addBtn = document.getElementById('add-btn');
+const lockedGate = document.getElementById('locked-gate');
+const listContent = document.getElementById('list-content');
 
 // ---------- 工具 ----------
 function setListStatus(text, type) {
@@ -144,12 +141,13 @@ document.querySelectorAll('#ledger-table thead th[data-key]').forEach(th => {
 });
 
 // ---------- 渲染表格 ----------
+// 此頁本身只有解鎖後才會顯示（見 locked-gate 控制），能看到表格
+// 就代表已經解鎖，因此表格內的編輯／刪除／Flag 切換一律視為可操作。
 function render() {
   if (!filteredMembers.length) {
     ledgerBody.innerHTML = '<tr class="empty-row"><td colspan="8">目前沒有符合條件的盟友資料</td></tr>';
     return;
   }
-  const unlocked = !!adminPassword;
   ledgerBody.innerHTML = filteredMembers.map(m => {
     const id = m['id'];
     const selected = toBool(m['是否入選']);
@@ -161,21 +159,21 @@ function render() {
         <td><span class="tag tag-group">${escapeHtml(m['組別'])}</span></td>
         <td>${escapeHtml(m['新遊戲名稱'])}</td>
         <td>
-          <label class="flag-toggle ${unlocked ? '' : 'disabled'}">
-            <input type="checkbox" data-id="${id}" data-key="是否入選" ${selected ? 'checked' : ''} ${unlocked ? '' : 'disabled'}>
+          <label class="flag-toggle">
+            <input type="checkbox" data-id="${id}" data-key="是否入選" ${selected ? 'checked' : ''}>
             ${selected ? '入選' : '未入選'}
           </label>
         </td>
         <td>
-          <label class="flag-toggle ${unlocked ? '' : 'disabled'}">
-            <input type="checkbox" data-id="${id}" data-key="是否高戰" ${veteran ? 'checked' : ''} ${unlocked ? '' : 'disabled'}>
+          <label class="flag-toggle">
+            <input type="checkbox" data-id="${id}" data-key="是否高戰" ${veteran ? 'checked' : ''}>
             ${veteran ? '高戰' : '一般'}
           </label>
         </td>
         <td>${fmtTime(m['時間戳記'])}</td>
         <td class="row-actions">
-          <button class="btn btn-ghost btn-small" data-action="edit" data-id="${id}" ${unlocked ? '' : 'disabled'}>編輯</button>
-          <button class="btn btn-danger-outline btn-small" data-action="delete" data-id="${id}" ${unlocked ? '' : 'disabled'}>刪除</button>
+          <button class="btn btn-ghost btn-small" data-action="edit" data-id="${id}">編輯</button>
+          <button class="btn btn-danger-outline btn-small" data-action="delete" data-id="${id}">刪除</button>
         </td>
       </tr>`;
   }).join('');
@@ -196,7 +194,7 @@ ledgerBody.addEventListener('change', async (e) => {
   const key = input.dataset.key;
   const value = input.checked;
   input.disabled = true;
-  const result = await apiPost({ action: 'update', id, password: adminPassword, data: { [key]: value } });
+  const result = await apiPost({ action: 'update', id, password: ybsGetPassword(), data: { [key]: value } });
   if (result.success) {
     const m = allMembers.find(x => x['id'] === id);
     if (m) m[key] = value;
@@ -235,43 +233,6 @@ document.getElementById('export-btn').addEventListener('click', () => {
   XLSX.utils.book_append_sheet(wb, ws, '盟友清單');
   const stamp = new Date().toISOString().slice(0,10);
   XLSX.writeFile(wb, `悠遊白書_盟友清單_${stamp}.xlsx`);
-});
-
-// ---------- 解鎖管理權限 ----------
-function refreshLockUI() {
-  const unlocked = !!adminPassword;
-  adminLockEl.classList.toggle('unlocked', unlocked);
-  adminLockLabel.textContent = unlocked ? '管理權限：已解鎖' : '管理權限：未解鎖';
-  adminLockBtn.textContent = unlocked ? '鎖定' : '解鎖';
-  addBtn.disabled = !unlocked;
-}
-
-adminLockBtn.addEventListener('click', () => {
-  if (adminPassword) {
-    adminPassword = null;
-    sessionStorage.removeItem('ybs_admin_password');
-    refreshLockUI();
-    render();
-  } else {
-    document.getElementById('unlock-password').value = '';
-    document.getElementById('unlock-error').textContent = '';
-    showModal('unlock-modal');
-  }
-});
-
-document.getElementById('unlock-confirm').addEventListener('click', async () => {
-  const pw = document.getElementById('unlock-password').value;
-  if (!pw) { document.getElementById('unlock-error').textContent = '請輸入密碼'; return; }
-  const result = await apiPost({ action: 'verify', password: pw });
-  if (result.success) {
-    adminPassword = pw;
-    sessionStorage.setItem('ybs_admin_password', pw);
-    refreshLockUI();
-    render();
-    hideModal('unlock-modal');
-  } else {
-    document.getElementById('unlock-error').textContent = '密碼錯誤';
-  }
 });
 
 // ---------- 新增／編輯 Modal ----------
@@ -318,8 +279,8 @@ document.getElementById('edit-save').addEventListener('click', async () => {
   };
 
   const payload = editingId
-    ? { action: 'update', id: editingId, password: adminPassword, data }
-    : { action: 'add', password: adminPassword, data };
+    ? { action: 'update', id: editingId, password: ybsGetPassword(), data }
+    : { action: 'add', password: ybsGetPassword(), data };
 
   const result = await apiPost(payload);
   if (result.success) {
@@ -340,7 +301,7 @@ function openDeleteModal(id) {
 }
 
 document.getElementById('delete-confirm').addEventListener('click', async () => {
-  const result = await apiPost({ action: 'delete', id: pendingDeleteId, password: adminPassword });
+  const result = await apiPost({ action: 'delete', id: pendingDeleteId, password: ybsGetPassword() });
   if (result.success) {
     hideModal('delete-modal');
     loadMembers();
@@ -353,6 +314,8 @@ document.getElementById('delete-confirm').addEventListener('click', async () => 
 function showModal(id) { document.getElementById(id).classList.add('show'); }
 function hideModal(id) { document.getElementById(id).classList.remove('show'); }
 document.querySelectorAll('[data-close]').forEach(btn => {
+  // unlock-modal 的關閉已由 auth.js 處理，這裡排除避免重複綁定
+  if (btn.dataset.close === 'unlock-modal') return;
   btn.addEventListener('click', () => hideModal(btn.dataset.close));
 });
 document.querySelectorAll('.modal-backdrop').forEach(bg => {
@@ -361,9 +324,35 @@ document.querySelectorAll('.modal-backdrop').forEach(bg => {
 
 document.getElementById('refresh-btn').addEventListener('click', loadMembers);
 
+// ---------- 鎖定畫面控制 ----------
+function showLockedGate() {
+  lockedGate.style.display = '';
+  listContent.style.display = 'none';
+}
+function showListContent() {
+  lockedGate.style.display = 'none';
+  listContent.style.display = '';
+}
+
+document.getElementById('locked-gate-unlock').addEventListener('click', ybsShowUnlockModal);
+
 // ---------- 初始化 ----------
 (async function init() {
-  refreshLockUI();
-  await loadGroups();
-  await loadMembers();
+  ybsInitAuthUI('list', async (unlocked) => {
+    if (unlocked) {
+      showListContent();
+      await loadGroups();
+      await loadMembers();
+    } else {
+      showLockedGate();
+    }
+  });
+
+  if (ybsIsUnlocked()) {
+    showListContent();
+    await loadGroups();
+    await loadMembers();
+  } else {
+    showLockedGate();
+  }
 })();

@@ -7,7 +7,7 @@
  */
 
 // 請填入你的 Google 試算表 ID（網址列 /d/ 與 /edit 之間那一串英數字）
-const SHEET_ID = 'https://docs.google.com/spreadsheets/d/1Ufia5rRGJprwZT0MxC1vrgC33VxER-Oacza8aNgbQ1w/edit';
+const SHEET_ID = 'https://docs.google.com/spreadsheets/d/1Ufia5rRGJprwZT0MxC1vrgC33VxER-Oacza8aNgbQ1w/edit?gid=0#gid=0';
 
 // 管理密碼：用來保護「編輯」「刪除」「切換Flag」等操作，請自行更改成一組不容易猜到的密碼
 const ADMIN_PASSWORD = '1534084';
