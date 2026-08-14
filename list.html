@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>悠遊白書｜盟友清單</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="page-wrap">
+
+  <header class="site-header">
+    <div class="title-block">
+      <div class="seal-stamp">悠遊白書</div>
+      <div class="title-text">
+        <h1>悠遊白書</h1>
+        <p>三國志戰略版・同盟登記處</p>
+      </div>
+    </div>
+    <nav class="site-nav">
+      <a href="index.html">盟友報名</a>
+      <a href="list.html" class="active">盟友清單</a>
+    </nav>
+  </header>
+
+  <section class="scroll-card">
+    <h2 class="section-title"><span class="eyebrow">貳</span>盟友清單</h2>
+    <p class="section-desc">同盟名冊總覽，可篩選、排序、匯出。編輯、刪除與新增需先解鎖管理權限。</p>
+
+    <div class="toolbar">
+      <div class="field grow">
+        <label>關鍵字搜尋</label>
+        <input type="text" id="filter-keyword" placeholder="搜尋遊戲名稱 / Line 名稱">
+      </div>
+      <div class="field">
+        <label>組別</label>
+        <select id="filter-group"><option value="">全部組別</option></select>
+      </div>
+      <div class="field">
+        <label>是否入選</label>
+        <select id="filter-selected">
+          <option value="">全部</option>
+          <option value="true">入選</option>
+          <option value="false">未入選</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>是否高戰</label>
+        <select id="filter-veteran">
+          <option value="">全部</option>
+          <option value="true">高戰</option>
+          <option value="false">非高戰</option>
+        </select>
+      </div>
+      <div class="toolbar-spacer"></div>
+      <div class="toolbar-actions">
+        <div class="admin-lock" id="admin-lock">
+          <span class="dot"></span>
+          <span id="admin-lock-label">管理權限：未解鎖</span>
+          <button type="button" class="btn btn-ghost btn-small" id="admin-lock-btn">解鎖</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-actions" style="margin-top:0; margin-bottom:18px;">
+      <button type="button" class="btn btn-bamboo" id="add-btn" disabled>＋ 新增盟友</button>
+      <button type="button" class="btn btn-ghost" id="refresh-btn">重新整理</button>
+      <button type="button" class="btn btn-primary" id="export-btn">匯出 Excel</button>
+      <span class="status-msg" id="list-status"></span>
+    </div>
+
+    <div class="table-wrap">
+      <table class="ledger" id="ledger-table">
+        <thead>
+          <tr>
+            <th data-key="遊戲名稱">遊戲名稱<span class="arrow"></span></th>
+            <th data-key="LineID">Line名稱<span class="arrow"></span></th>
+            <th data-key="組別">組別<span class="arrow"></span></th>
+            <th data-key="新遊戲名稱">新遊戲名稱<span class="arrow"></span></th>
+            <th data-key="是否入選">是否入選<span class="arrow"></span></th>
+            <th data-key="是否高戰">是否高戰<span class="arrow"></span></th>
+            <th data-key="時間戳記">登記時間<span class="arrow"></span></th>
+            <th class="no-sort">操作</th>
+          </tr>
+        </thead>
+        <tbody id="ledger-body">
+          <tr class="empty-row"><td colspan="8">載入中…</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer class="site-footer">悠遊白書 ・ 同盟內部管理工具</footer>
+</div>
+
+<!-- 解鎖管理權限 Modal -->
+<div class="modal-backdrop" id="unlock-modal">
+  <div class="modal">
+    <h3>解鎖管理權限</h3>
+    <div class="form-grid">
+      <div class="field">
+        <label>管理密碼</label>
+        <input type="password" id="unlock-password" placeholder="請輸入管理密碼">
+      </div>
+    </div>
+    <div class="status-msg err" id="unlock-error"></div>
+    <div class="modal-actions">
+      <button type="button" class="btn btn-ghost" data-close="unlock-modal">取消</button>
+      <button type="button" class="btn btn-primary" id="unlock-confirm">確認</button>
+    </div>
+  </div>
+</div>
+
+<!-- 新增／編輯 Modal -->
+<div class="modal-backdrop" id="edit-modal">
+  <div class="modal">
+    <h3 id="edit-modal-title">編輯盟友資料</h3>
+    <div class="form-grid">
+      <div class="field">
+        <label>遊戲名稱 <span class="required">*</span></label>
+        <input type="text" id="edit-gameName">
+      </div>
+      <div class="field">
+        <label>Line 名稱</label>
+        <input type="text" id="edit-lineName">
+      </div>
+      <div class="field">
+        <label>組別 <span class="required">*</span></label>
+        <select id="edit-group"></select>
+      </div>
+      <div class="field">
+        <label>新遊戲名稱</label>
+        <input type="text" id="edit-newGameName">
+      </div>
+      <div class="field">
+        <label class="flag-toggle"><input type="checkbox" id="edit-selected"> 是否入選</label>
+      </div>
+      <div class="field">
+        <label class="flag-toggle"><input type="checkbox" id="edit-veteran"> 是否高戰</label>
+      </div>
+    </div>
+    <div class="status-msg err" id="edit-error"></div>
+    <div class="modal-actions">
+      <button type="button" class="btn btn-ghost" data-close="edit-modal">取消</button>
+      <button type="button" class="btn btn-primary" id="edit-save">儲存</button>
+    </div>
+  </div>
+</div>
+
+<!-- 刪除確認 Modal -->
+<div class="modal-backdrop" id="delete-modal">
+  <div class="modal">
+    <h3>刪除確認</h3>
+    <p id="delete-target-name" style="font-size:14px;"></p>
+    <div class="status-msg err" id="delete-error"></div>
+    <div class="modal-actions">
+      <button type="button" class="btn btn-ghost" data-close="delete-modal">取消</button>
+      <button type="button" class="btn btn-danger-outline" id="delete-confirm">確認刪除</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="js/config.js"></script>
+<script src="js/list.js"></script>
+</body>
+</html>
