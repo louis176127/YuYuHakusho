@@ -39,7 +39,7 @@ function ybsRenderNav(activePage) {
   const nav = document.getElementById('site-nav');
   if (!nav) return;
   const unlocked = ybsIsUnlocked();
-  let html = `<a href="index.html" class="${activePage === 'index' ? 'active' : ''}">盟友報名</a>`;
+  let html = `<a href="index.html" class="${activePage === 'index' ? 'active' : ''}">S27盟友報名</a>`;
   if (unlocked) {
     html += `<a href="list.html" class="${activePage === 'list' ? 'active' : ''}">盟友清單</a>`;
   }
