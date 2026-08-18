@@ -43,6 +43,7 @@ function ybsRenderNav(activePage) {
   if (unlocked) {
     html += `<a href="list.html" class="${activePage === 'list' ? 'active' : ''}">盟友清單</a>`;
     html += `<a href="stats.html" class="${activePage === 'stats' ? 'active' : ''}">盟友統計</a>`;
+    html += `<a href="roster.html" class="${activePage === 'roster' ? 'active' : ''}">分組名冊</a>`;
   }
   nav.innerHTML = html;
 }
@@ -84,7 +85,7 @@ function ybsInitAuthUI(activePage, onChange) {
       ybsRenderNav(activePage);
       ybsRenderLockUI();
       if (onChange) onChange(false);
-      if (activePage === 'list' || activePage === 'stats') {
+      if (activePage === 'list' || activePage === 'stats' || activePage === 'roster') {
         // 在受保護頁面鎖定後，導回報名頁（這些頁面僅限已解鎖時瀏覽）
         window.location.href = 'index.html';
       }
