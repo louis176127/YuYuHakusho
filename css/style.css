@@ -464,6 +464,50 @@ footer.site-footer {
   border-left: 4px solid var(--seal-red);
 }
 
+/* ---------- 分組名冊頁 ---------- */
+.roster-legend {
+  display: flex;
+  gap: 22px;
+  margin-bottom: 14px;
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+.legend-item { display: flex; align-items: center; gap: 7px; }
+.legend-dot { width: 12px; height: 12px; border-radius: 3px; display: inline-block; }
+.legend-dot.vet { background: var(--seal-red); }
+.legend-dot.normal { background: var(--bronze-soft); }
+
+table.roster-table thead th.roster-col-head {
+  text-align: center;
+}
+.roster-count {
+  font-weight: 400;
+  opacity: 0.75;
+  font-size: 11px;
+  margin-left: 2px;
+}
+table.roster-table td {
+  text-align: center;
+  padding: 9px 12px;
+}
+.roster-empty-cell::before {
+  content: '—';
+  color: var(--border-strong);
+}
+.roster-name {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 4px;
+  font-size: 13px;
+  color: var(--ink);
+}
+.roster-name-vet {
+  background: rgba(166, 50, 28, 0.12);
+  color: var(--seal-red-dark);
+  font-weight: 700;
+  border: 1px solid var(--seal-red-soft);
+}
+
 /* ============================================
    響應式：平板（≤ 900px）
    ============================================ */

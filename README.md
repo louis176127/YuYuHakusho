@@ -76,14 +76,14 @@ const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxxxxxxxxxxxx/exec'
 ## 四、發佈到 GitHub Pages
 
 1. 到 GitHub 建立一個新的 **Public** repository，例如叫 `youyou-baishu`。
-2. 把這個資料夾（`index.html`、`list.html`、`stats.html`、`css/`、`js/`）全部上傳到 repo（`Code.gs` 和 `README.md` 也可以一併放上去方便未來維護，它們不會影響網站運作）。
+2. 把這個資料夾（`index.html`、`list.html`、`stats.html`、`roster.html`、`css/`、`js/`）全部上傳到 repo（`Code.gs` 和 `README.md` 也可以一併放上去方便未來維護，它們不會影響網站運作）。
 3. 到 repo 的 **Settings → Pages**：
    - Source 選擇 `main` 分支、資料夾選 `/ (root)`
    - 存檔後幾分鐘，會產生網址：
      ```
      https://你的帳號.github.io/youyou-baishu/
      ```
-4. 把這個網址分享給盟友，「盟友報名」頁面任何人都可以直接填寫；「盟友清單」與「盟友統計」頁面需要輸入管理密碼才能瀏覽，未解鎖時導覽列也不會顯示這兩個連結。
+4. 把這個網址分享給盟友，「盟友報名」頁面任何人都可以直接填寫；「盟友清單」「盟友統計」「分組名冊」頁面需要輸入管理密碼才能瀏覽，未解鎖時導覽列也不會顯示這些連結。
 
 ---
 
@@ -109,6 +109,12 @@ const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxxxxxxxxxxxx/exec'
 - 直方圖：以組別為橫軸，堆疊顯示「一般」與「高戰」盟友人數（顏色區分），滑鼠移到長條上會顯示各組總人數
 - 下方表格列出每個組別的一般人數、高戰人數與總人數，並附總計列
 - 沒有人報名的組別也會列出（人數為 0），方便掌握各組招募進度
+
+### 分組名冊（roster.html）
+- 同樣需先解鎖管理密碼才能瀏覽
+- 以「組別」為欄位，彙整盟友清單成一張總覽表：每欄下方列出該組所有盟友
+- 每個組別內部排序規則：**高戰盟友優先排在最上面**，一般盟友排在後面；高戰盟友的名字會用紅色底色標示，方便一眼辨識
+- 上方可勾選「僅顯示已入選盟友」，排除尚未入選的報名資料
 
 ---
 
